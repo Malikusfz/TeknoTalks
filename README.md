@@ -40,28 +40,28 @@ Pastikan Anda telah menginstal: | Ensure you have the following installed:
 
 1. Clone repositori:
 
-    \`\`\`bash
+    ```bash
     git clone https://github.com/yourusername/TeknoTalks.git
     cd TeknoTalks
-    \`\`\`
+    ```
 
 2. Instal dependensi:
 
-    \`\`\`bash
+    ```bash
     npm install
     # atau | or
     yarn install
-    \`\`\`
+    ```
 
 3. Jalankan server pengembangan:
 
-    \`\`\`bash
+    ```bash
     npm run dev
     # atau | or
     yarn dev
-    \`\`\`
+    ```
 
-4. Buka browser Anda dan navigasikan ke \`http://localhost:3000\`
+4. Buka browser Anda dan navigasikan ke `http://localhost:3000`
 
 ## Penggunaan | Usage
 
