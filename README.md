@@ -1,6 +1,9 @@
 
 # TeknoTalks
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Node.js](https://img.shields.io/badge/Node.js-14.x-brightgreen.svg)](https://nodejs.org/)
+
 ## Pendahuluan | Introduction
 
 TeknoTalks adalah aplikasi web yang dirancang untuk memfasilitasi diskusi dan berbagi pengetahuan teknis. Proyek ini memanfaatkan teknologi frontend modern untuk menciptakan pengalaman pengguna yang mulus.
@@ -9,12 +12,12 @@ TeknoTalks is a web application designed to facilitate discussions and sharing o
 
 ## Daftar Isi | Table of Contents
 
-1. [Fitur](#fitur) | [Features](#features)
-2. [Instalasi](#instalasi) | [Installation](#installation)
-3. [Penggunaan](#penggunaan) | [Usage](#usage)
-4. [Berkontribusi](#berkontribusi) | [Contributing](#contributing)
-5. [Lisensi](#lisensi) | [License](#license)
-6. [Penghargaan](#penghargaan) | [Acknowledgements](#acknowledgements)
+1. [Fitur](#fitur--features)
+2. [Instalasi](#instalasi--installation)
+3. [Penggunaan](#penggunaan--usage)
+4. [Berkontribusi](#berkontribusi--contributing)
+5. [Lisensi](#lisensi--license)
+6. [Penghargaan](#penghargaan--acknowledgements)
 
 ## Fitur | Features
 
@@ -37,28 +40,28 @@ Pastikan Anda telah menginstal: | Ensure you have the following installed:
 
 1. Clone repositori:
 
-```bash
-git clone https://github.com/yourusername/TeknoTalks.git
-cd TeknoTalks
-```
+    \`\`\`bash
+    git clone https://github.com/yourusername/TeknoTalks.git
+    cd TeknoTalks
+    \`\`\`
 
 2. Instal dependensi:
 
-```bash
-npm install
-# atau | or
-yarn install
-```
+    \`\`\`bash
+    npm install
+    # atau | or
+    yarn install
+    \`\`\`
 
 3. Jalankan server pengembangan:
 
-```bash
-npm run dev
-# atau | or
-yarn dev
-```
+    \`\`\`bash
+    npm run dev
+    # atau | or
+    yarn dev
+    \`\`\`
 
-4. Buka browser Anda dan navigasikan ke `http://localhost:3000`
+4. Buka browser Anda dan navigasikan ke \`http://localhost:3000\`
 
 ## Penggunaan | Usage
 
@@ -66,7 +69,7 @@ yarn dev
 - Buat thread diskusi baru, lihat thread yang ada, dan ikuti diskusi dengan berkomentar.
 - Periksa papan peringkat untuk melihat kontributor teratas di komunitas.
 
-- Register for a new account or log in with existing credentials.
+Register for a new account or log in with existing credentials.
 - Create new discussion threads, view existing threads, and participate in discussions by commenting.
 - Check the leaderboards to see the top contributors in the community.
 
