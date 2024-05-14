@@ -66,7 +66,7 @@ yarn dev
 - Buat thread diskusi baru, lihat thread yang ada, dan ikuti diskusi dengan berkomentar.
 - Periksa papan peringkat untuk melihat kontributor teratas di komunitas.
 
-Register for a new account or log in with existing credentials.
+- Register for a new account or log in with existing credentials.
 - Create new discussion threads, view existing threads, and participate in discussions by commenting.
 - Check the leaderboards to see the top contributors in the community.
 
