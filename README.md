@@ -12,12 +12,12 @@ TeknoTalks is a web application designed to facilitate discussions and sharing o
 
 ## Daftar Isi | Table of Contents
 
-1. [Fitur](#fitur--features)
-2. [Instalasi](#instalasi--installation)
-3. [Penggunaan](#penggunaan--usage)
-4. [Berkontribusi](#berkontribusi--contributing)
-5. [Lisensi](#lisensi--license)
-6. [Penghargaan](#penghargaan--acknowledgements)
+1. [Fitur | Features](#fitur--features)
+2. [Instalasi | Installation](#instalasi--installation)
+3. [Penggunaan | Usage](#penggunaan--usage)
+4. [Berkontribusi | Contributing](#berkontribusi--contributing)
+5. [Lisensi | License](#lisensi--license)
+6. [Penghargaan | Acknowledgements](#penghargaan--acknowledgements)
 
 ## Fitur | Features
 
