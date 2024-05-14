@@ -41,7 +41,7 @@ Pastikan Anda telah menginstal: | Ensure you have the following installed:
 1. Clone repositori:
 
     ```bash
-    git clone https://github.com/yourusername/TeknoTalks.git
+    git clone https://github.com/Malikusfz/TeknoTalks.git
     cd TeknoTalks
     ```
 
