@@ -1,10 +1,13 @@
 import { hideLoading, showLoading } from 'react-redux-loading-bar';
 import { toast } from 'react-toastify';
 import api from '../../utils/api';
+<<<<<<< HEAD
 import {
   neutralizeThreadVoteActionCreator,
   toggleDownvoteThreadActionCreator,
 } from '../threads/action';
+=======
+>>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
 
 const ActionType = {
   RECEIVE_THREAD_DETAIL: 'RECEIVE_THREAD_DETAIL',
@@ -22,11 +25,18 @@ const ActionType = {
 const handleAsyncAction = async (dispatch, asyncFunc, ...params) => {
   dispatch(showLoading());
   try {
+<<<<<<< HEAD
     const result = await asyncFunc(...params);
     return result; // Return the result from the async function
   } catch (error) {
     console.error(error.message); // Use console.error instead of alert
     return null; // Return null or an appropriate error value
+=======
+    return await asyncFunc(...params);
+  } catch (error) {
+    toast.error(`Error: ${error.message}`);
+    return null;
+>>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
   } finally {
     dispatch(hideLoading());
   }
@@ -35,6 +45,7 @@ const handleAsyncAction = async (dispatch, asyncFunc, ...params) => {
 // Fungsi pembantu untuk membuat action creator
 const makeActionCreator = (type, payload) => ({ type, payload });
 
+<<<<<<< HEAD
 function receiveThreadDetailActionCreator(threadDetail) {
   return makeActionCreator(ActionType.RECEIVE_THREAD_DETAIL, { threadDetail });
 }
@@ -90,6 +101,21 @@ const asyncReceiveThreadDetail = (threadId) => async (dispatch) => {
     api.seeDetailThread,
     threadId,
   );
+=======
+const receiveThreadDetailActionCreator = (threadDetail) => makeActionCreator(ActionType.RECEIVE_THREAD_DETAIL, { threadDetail });
+
+const clearThreadDetailActionCreator = () => makeActionCreator(ActionType.CLEAR_THREAD_DETAIL);
+
+const addThreadCommentActionCreator = (detailComment) => makeActionCreator(ActionType.ADD_THREAD_COMMENT, { detailComment });
+
+const toggleVoteActionCreator = (type, { threadId, userId }) => makeActionCreator(type, { threadId, userId });
+
+const toggleCommentVoteActionCreator = (type, { threadId, commentId, userId }) => makeActionCreator(type, { threadId, commentId, userId });
+
+const asyncReceiveThreadDetail = (threadId) => async (dispatch) => {
+  dispatch(clearThreadDetailActionCreator());
+  const threadDetail = await handleAsyncAction(dispatch, api.seeDetailThread, threadId);
+>>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
   if (threadDetail) {
     dispatch(receiveThreadDetailActionCreator(threadDetail));
   }
@@ -105,6 +131,7 @@ const asyncAddThreadComment = ({ threadId, commentValue }) => async (dispatch) =
   }
 };
 
+<<<<<<< HEAD
 const asyncToggleUpVoteThreadDetail = (threadId) => async (dispatch, getState) => {
   const { authUser } = getState();
   dispatch(
@@ -273,17 +300,47 @@ function asyncNeutralizeVoteComment({ threadId, commentId }) {
     dispatch(hideLoading());
   };
 }
+=======
+const asyncToggleVoteThreadDetail = (type, apiFunc) => (threadId) => async (dispatch, getState) => {
+  const { authUser } = getState();
+  dispatch(toggleVoteActionCreator(type, { threadId, userId: authUser.id }));
+  const success = await handleAsyncAction(dispatch, apiFunc, threadId);
+  if (!success) {
+    dispatch(toggleVoteActionCreator(type, { threadId, userId: authUser.id }));
+  }
+};
+
+const asyncToggleVoteComment = (type, apiFunc) => ({ threadId, commentId }) => async (dispatch, getState) => {
+  const { authUser } = getState();
+  dispatch(toggleCommentVoteActionCreator(type, { threadId, commentId, userId: authUser.id }));
+  const success = await handleAsyncAction(dispatch, apiFunc, { threadId, commentId });
+  if (!success) {
+    dispatch(toggleCommentVoteActionCreator(type, { threadId, commentId, userId: authUser.id }));
+  }
+};
+
+const asyncToggleUpVoteThreadDetail = asyncToggleVoteThreadDetail(ActionType.UPVOTE_THREAD_DETAIL, api.upVoteThread);
+const asyncToggleDownVoteThreadDetail = asyncToggleVoteThreadDetail(ActionType.DOWNVOTE_THREAD_DETAIL, api.downVoteThread);
+const asyncNeutralizeThreadDetailVote = asyncToggleVoteThreadDetail(ActionType.NEUTRALIZE_THREAD_DETAIL_VOTE, api.neutralizeVoteThread);
+
+const asyncToggleUpVoteComment = asyncToggleVoteComment(ActionType.UPVOTE_COMMENT, api.upVoteComment);
+const asyncToggleDownVoteComment = asyncToggleVoteComment(ActionType.DOWNVOTE_COMMENT, api.downVoteComment);
+const asyncNeutralizeVoteComment = asyncToggleVoteComment(ActionType.NEUTRALIZE_COMMENT_VOTE, api.neutralizeVoteComment);
+>>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
 
 export {
   ActionType,
   receiveThreadDetailActionCreator,
   addThreadCommentActionCreator,
+<<<<<<< HEAD
   toggleUpvoteThreadDetailActionCreator,
   toggleDownvoteThreadDetailActionCreator,
   neutralizeThreadDetailVoteActionCreator,
   toggleUpvoteCommentActionCreator,
   toggleDownvoteCommentActionCreator,
   neutralizeVoteCommentActionCreator,
+=======
+>>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
   asyncToggleUpVoteThreadDetail,
   asyncToggleDownVoteThreadDetail,
   asyncNeutralizeThreadDetailVote,
