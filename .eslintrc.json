@@ -14,11 +14,7 @@
   "plugins": ["react"],
   "rules": {
     "react/react-in-jsx-scope": "off",
-<<<<<<< HEAD
     "max-len": ["error", { "code": 120 }],
-=======
-    "max-len": ["error", { "code": nonexistent }],
->>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
     "no-console": "off",
     "react/jsx-props-no-spreading": "off"
   }

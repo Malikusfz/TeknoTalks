@@ -50,12 +50,8 @@ export default function RegisterInput({ register }) {
         <Input
           type="text"
           focusBorderColor="teal.400"
-<<<<<<< HEAD
-          {...formik.getFieldProps('name')}
-=======
           name={formik.getFieldProps('name').field.value}
           onChange={formik.getFieldProps('name').field.onChange}
->>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
         />
         {formik.touched.name && formik.errors.name && (
           <Alert status="error" mt={2}>

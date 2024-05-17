@@ -32,15 +32,6 @@ function Register() {
     }
   };
 
-<<<<<<< HEAD
-  const signOut = () => {
-    // Define your signOut function logic here
-    console.log('Sign out');
-    // Implement your sign-out logic, such as dispatching an action or redirecting the user
-  };
-
-=======
->>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
   if (loading || isSubmitting) {
     return <div>Loading...</div>;
   }
@@ -65,11 +56,7 @@ function Register() {
       justifyContent="center"
       bg="#FFF5E4"
     >
-<<<<<<< HEAD
-      <HeaderWithNavigation showHamburger={false} signOut={signOut} />
-=======
       <HeaderWithNavigation showHamburger={false} />
->>>>>>> c5b8a6134ea12b86d448c87ba7bd82b0ac4a1d73
       <Box
         w="full"
         p={8}
