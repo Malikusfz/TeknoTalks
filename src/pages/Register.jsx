@@ -23,13 +23,19 @@ function Register() {
   const onRegister = async ({ name, email, password }) => {
     setIsSubmitting(true);
     try {
-      await dispatch(asyncRegisterUser({ name, email, password })).unwrap();
-      navigate('/');
+      await dispatch(asyncRegisterUser({
+        name, email, password, successCallback: () => navigate('/'),
+      }));
     } catch (rejectedValueOrSerializedError) {
       console.error(rejectedValueOrSerializedError);
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const signOut = () => {
+    // Add your sign out logic here
+    console.log('User signed out');
   };
 
   if (loading || isSubmitting) {
@@ -56,7 +62,7 @@ function Register() {
       justifyContent="center"
       bg="#FFF5E4"
     >
-      <HeaderWithNavigation showHamburger={false} />
+      <HeaderWithNavigation signOut={signOut} showHamburger={false} />
       <Box
         w="full"
         p={8}

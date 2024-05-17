@@ -20,17 +20,14 @@ function asyncRegisterUser({
 }) {
   return async (dispatch) => {
     dispatch(showLoading());
-    const registerPromise = api.register({ name, email, password });
-
-    registerPromise
-      .then(() => {
-        successCallback();
-        dispatch(hideLoading());
-      })
-      .catch((error) => {
-        toast.alert(error.message);
-        dispatch(hideLoading());
-      });
+    try {
+      await api.register({ name, email, password });
+      successCallback();
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      dispatch(hideLoading());
+    }
   };
 }
 
