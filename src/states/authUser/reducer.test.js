@@ -41,8 +41,8 @@ describe('authUserReducer function', () => {
     // Execute the reducer to update state
     const resultState = authUserReducer(initialState, setUserAction);
 
-    // Verify the new state matches the payload
-    expect(resultState).toEqual(userData);
+    // Verify the new state matches the payload (ubah ekspektasi untuk menyebabkan gagal)
+    expect(resultState).not.toEqual(userData); // Ubah dari 'toEqual' ke 'not.toEqual' untuk menyebabkan gagal
   });
 
   test('clears state to null on UNSET_AUTH_USER action', () => {
