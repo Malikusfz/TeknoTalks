@@ -20,7 +20,7 @@ const handleApiResponse = async (apiCall, onSuccess, onFailure) => {
     onSuccess(response);
   } catch (error) {
     console.error('API call failed:', error);
-    onFailure();
+    onFailure(error);
   }
 };
 
@@ -33,8 +33,9 @@ function asyncPreloadProcess() {
     const onSuccess = (authUser) => {
       dispatch(setAuthUserActionCreator(authUser));
     };
-    const onFailure = () => {
+    const onFailure = (error) => {
       dispatch(setAuthUserActionCreator(null));
+      console.error('Error in asyncPreloadProcess:', error);
     };
 
     await handleApiResponse(apiCall, onSuccess, onFailure);

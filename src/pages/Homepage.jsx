@@ -7,36 +7,97 @@ import {
 } from '@chakra-ui/react';
 import { LuMessageSquarePlus } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { useEffect, useMemo } from 'react';
+import { useQuery, useMutation, useQueryClient } from 'react-query';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
 import ThreadsList from '../components/ThreadsList';
-import { fetchThreadsAndUsers } from '../states/shared/action';
-import {
-  asyncNeutralizeThreadVote,
-  asyncToggleDownVoteThread,
-  asyncToggleUpVoteThread,
-} from '../states/threads/action';
+import api from '../utils/api';
+
+const fetchThreadsAndUsers = async () => {
+  const [threads, users] = await Promise.all([api.seeAllThreads(), api.getAllUsers()]);
+  return { threads, users };
+};
+
+const toggleUpVoteThread = async (threadId) => {
+  await api.upVoteThread(threadId);
+};
+
+const toggleDownVoteThread = async (threadId) => {
+  await api.downVoteThread(threadId);
+};
+
+const neutralizeThreadVote = async (threadId) => {
+  await api.neutralizeVoteThread(threadId);
+};
 
 function Homepage() {
-  const threads = useSelector((state) => state.threads);
-  const users = useSelector((state) => state.users);
+  const queryClient = useQueryClient();
+  const { data, error, isLoading } = useQuery('threadsAndUsers', fetchThreadsAndUsers, {
+    staleTime: 1000 * 60 * 5, // Cache the data for 5 minutes
+  });
+  const [localVotes, setLocalVotes] = useState({});
+
+  const upVoteMutation = useMutation(toggleUpVoteThread, {
+    onSuccess: () => queryClient.invalidateQueries('threadsAndUsers'),
+  });
+  const downVoteMutation = useMutation(toggleDownVoteThread, {
+    onSuccess: () => queryClient.invalidateQueries('threadsAndUsers'),
+  });
+  const neutralizeVoteMutation = useMutation(neutralizeThreadVote, {
+    onSuccess: () => queryClient.invalidateQueries('threadsAndUsers'),
+  });
+
   const authUser = useSelector((state) => state.authUser);
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchThreadsAndUsers());
-  }, [dispatch]);
+  if (isLoading) return <div>Loading...</div>;
+  if (error) {
+    return (
+      <div>
+        Error:
+        {error.message}
+      </div>
+    );
+  }
 
-  const threadList = useMemo(
-    () => threads.map((thread) => ({
+  const { threads, users } = data || { threads: [], users: [] };
+
+  const threadList = Array.isArray(threads)
+    ? threads.map((thread) => ({
       ...thread,
       user: users.find((user) => user.id === thread.ownerId),
-    })),
-    [threads, users],
-  );
+      votes: localVotes[thread.id] !== undefined ? localVotes[thread.id] : thread.votes,
+    }))
+    : [];
 
   const voteHandler = (threadId, action) => {
-    dispatch(action(threadId));
+    const previousVotes = localVotes[threadId] !== undefined ? localVotes[threadId] : threads.find((thread) => thread.id === threadId).votes;
+    let newVotes;
+
+    if (action === 'upvote') {
+      newVotes = previousVotes + 1;
+      setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes }));
+      upVoteMutation.mutate(threadId, {
+        onError: () => {
+          setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes }));
+        },
+      });
+    } else if (action === 'downvote') {
+      newVotes = previousVotes - 1;
+      setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes }));
+      downVoteMutation.mutate(threadId, {
+        onError: () => {
+          setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes }));
+        },
+      });
+    } else if (action === 'neutralize') {
+      newVotes = previousVotes;
+      setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes }));
+      neutralizeVoteMutation.mutate(threadId, {
+        onError: () => {
+          setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes }));
+        },
+      });
+    }
   };
 
   return (
@@ -46,13 +107,17 @@ function Homepage() {
           <Heading as="h2" fontSize="3xl" color="teal.900" marginTop="1rem">
             Discussions
           </Heading>
-          <ThreadsList
-            threads={threadList}
-            authUserId={authUser.id}
-            upVote={(threadId) => voteHandler(threadId, asyncToggleUpVoteThread)}
-            downVote={(threadId) => voteHandler(threadId, asyncToggleDownVoteThread)}
-            neutralizeVote={(threadId) => voteHandler(threadId, asyncNeutralizeThreadVote)}
-          />
+          {threadList.length > 0 ? (
+            <ThreadsList
+              threads={threadList}
+              authUserId={authUser.id}
+              upVote={(threadId) => voteHandler(threadId, 'upvote')}
+              downVote={(threadId) => voteHandler(threadId, 'downvote')}
+              neutralizeVote={(threadId) => voteHandler(threadId, 'neutralize')}
+            />
+          ) : (
+            <p>No threads available.</p>
+          )}
         </Box>
         <ChakraLink as={Link} to="/add" position="fixed" bottom={30} right={30}>
           <IconButton

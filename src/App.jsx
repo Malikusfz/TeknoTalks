@@ -4,6 +4,7 @@ import {
   Route,
   RouterProvider,
 } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import AddThread from './pages/AddThread';
 import DetailPage from './pages/DetailPage';
 import Homepage from './pages/Homepage';
@@ -13,6 +14,8 @@ import NotFound from './components/NotFound';
 import Register from './pages/Register';
 import RequireAuth from './layout/RequireAuth';
 import Layout from './layout/Layout';
+
+const queryClient = new QueryClient();
 
 const routes = createRoutesFromElements(
   <Route path="/" element={<Layout />} errorElement={<NotFound />}>
@@ -30,7 +33,11 @@ const routes = createRoutesFromElements(
 const router = createBrowserRouter(routes);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  );
 }
 
 export default App;

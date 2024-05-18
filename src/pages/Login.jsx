@@ -10,9 +10,10 @@ import { asyncPreloadProcess } from '../states/isPreload/action';
 import { asyncSetAuthUser } from '../states/authUser/action';
 
 function Login() {
-  const { authUser } = useSelector((state) => state);
+  const authUser = useSelector((state) => state.authUser);
   const dispatch = useDispatch();
   const signOut = () => console.log('Signing out...');
+
   useEffect(() => {
     dispatch(asyncPreloadProcess());
   }, [dispatch]);
