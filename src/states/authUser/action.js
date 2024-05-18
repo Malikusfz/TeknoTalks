@@ -28,22 +28,16 @@ function asyncSetAuthUser({ email, password }) {
   return async (dispatch) => {
     dispatch(showLoading());
 
-    const token = await api.login({ email, password }).catch((error) => {
-      console.error(error.message);
-      dispatch(hideLoading());
-    });
-
-    if (token) {
+    try {
+      const token = await api.login({ email, password });
       api.putAccessToken(token);
-      const authUser = await api.getOwnProfile().catch((error) => {
-        console.error(error.message);
-        dispatch(hideLoading());
-      });
+      const authUser = await api.getOwnProfile();
 
-      if (authUser) {
-        dispatch(setAuthUserActionCreator(authUser));
-        dispatch(hideLoading());
-      }
+      dispatch(setAuthUserActionCreator(authUser));
+    } catch (error) {
+      console.error(error.message);
+    } finally {
+      dispatch(hideLoading());
     }
   };
 }

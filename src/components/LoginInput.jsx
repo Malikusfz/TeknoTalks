@@ -13,7 +13,7 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-// Skema validasi menggunakan yup
+// Validation schema using yup
 const validationSchema = yup.object({
   email: yup
     .string()
@@ -26,7 +26,7 @@ export default function LoginInput({ login }) {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickVisibility = () => setShowPassword(!showPassword);
 
-  // useFormik hook untuk mengelola form state dan validasi
+  // useFormik hook for form state management and validation
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -49,7 +49,7 @@ export default function LoginInput({ login }) {
           placeholder="Email"
         />
         {formik.touched.email && formik.errors.email ? (
-          <div>{formik.errors.email}</div>
+          <Box color="red.500" mt={2}>{formik.errors.email}</Box>
         ) : null}
       </FormControl>
       <FormControl mt={4} id="password" isRequired>
@@ -73,7 +73,7 @@ export default function LoginInput({ login }) {
           </InputRightElement>
         </InputGroup>
         {formik.touched.password && formik.errors.password ? (
-          <div>{formik.errors.password}</div>
+          <Box color="red.500" mt={2}>{formik.errors.password}</Box>
         ) : null}
       </FormControl>
       <Button w="full" mt="6" colorScheme="teal" variant="solid" type="submit">
@@ -84,5 +84,5 @@ export default function LoginInput({ login }) {
 }
 
 LoginInput.propTypes = {
-  login: PropTypes.func.isRequired, // Menambahkan validasi untuk prop 'login'
+  login: PropTypes.func.isRequired, // Adding validation for prop 'login'
 };

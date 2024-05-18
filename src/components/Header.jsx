@@ -36,14 +36,11 @@ NavigationLink.displayName = 'NavigationLink';
 
 NavigationLink.propTypes = {
   to: PropTypes.string.isRequired,
-  icon: PropTypes.element,
+  icon: PropTypes.element.isRequired, // Make icon required
   children: PropTypes.node.isRequired,
 };
 
-export default function HeaderWithNavigation({
-  signOut,
-  showHamburger = true,
-}) {
+export default function HeaderWithNavigation({ signOut, showHamburger = true }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -94,10 +91,7 @@ export default function HeaderWithNavigation({
               <NavigationLink to="/" icon={<IoChatbubblesOutline />}>
                 Thread
               </NavigationLink>
-              <NavigationLink
-                to="/leaderboards"
-                icon={<MdOutlineLeaderboard />}
-              >
+              <NavigationLink to="/leaderboards" icon={<MdOutlineLeaderboard />}>
                 Leaderboards
               </NavigationLink>
             </VStack>
@@ -126,10 +120,4 @@ HeaderWithNavigation.propTypes = {
 
 HeaderWithNavigation.defaultProps = {
   showHamburger: true,
-};
-
-NavigationLink.propTypes = {
-  to: PropTypes.string.isRequired,
-  icon: PropTypes.element.isRequired, // Make icon required
-  children: PropTypes.node.isRequired,
 };

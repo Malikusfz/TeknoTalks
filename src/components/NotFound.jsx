@@ -34,11 +34,11 @@ const NotFoundContent = React.memo(() => (
   </Flex>
 ));
 
-// Menambahkan displayName ke NotFoundContent
+// Adding displayName to NotFoundContent
 NotFoundContent.displayName = 'NotFoundContent';
 
 export default function NotFound() {
-  const signOut = () => console.log('Signing out...'); // Contoh fungsi, sesuaikan dengan logika Anda
+  const signOut = () => console.log('Signing out...'); // Example function, customize with your logic
 
   return (
     <>

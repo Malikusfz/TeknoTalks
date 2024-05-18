@@ -1,4 +1,4 @@
-// AddThreadInput.js
+import React, { useState } from 'react';
 import {
   Box,
   Button,
@@ -10,7 +10,6 @@ import {
 } from '@chakra-ui/react';
 import { IoSend } from 'react-icons/io5';
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 
 export default function AddThreadInput({ addThread }) {
   const [title, setTitle] = useState('');
