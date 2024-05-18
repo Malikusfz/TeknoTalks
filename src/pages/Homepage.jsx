@@ -1,4 +1,3 @@
-// Menghapus useState untuk menyebabkan error
 import {
   Box,
   Container,
@@ -10,9 +9,9 @@ import { LuMessageSquarePlus } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from 'react-query';
 import { useSelector } from 'react-redux';
-// import { useState } from 'react'; // Hapus useState untuk menyebabkan error
-import ThreadsList dari '../components/ThreadsList';
-import api dari '../utils/api';
+import { useState } from 'react';
+import ThreadsList from '../components/ThreadsList';
+import api from '../utils/api';
 
 const fetchThreadsAndUsers = async () => {
   const [threads, users] = await Promise.all([api.seeAllThreads(), api.getAllUsers()]);
@@ -36,7 +35,7 @@ function Homepage() {
   const { data, error, isLoading } = useQuery('threadsAndUsers', fetchThreadsAndUsers, {
     staleTime: 1000 * 60 * 5, // Cache the data for 5 minutes
   });
-  // const [localVotes, setLocalVotes] = useState({}); // Hapus useState untuk menyebabkan error
+  const [localVotes, setLocalVotes] = useState({});
 
   const upVoteMutation = useMutation(toggleUpVoteThread, {
     onSuccess: () => queryClient.invalidateQueries('threadsAndUsers'),
@@ -66,37 +65,36 @@ function Homepage() {
     ? threads.map((thread) => ({
       ...thread,
       user: users.find((user) => user.id === thread.ownerId),
-      // votes: localVotes[thread.id] !== undefined ? localVotes[thread.id] : thread.votes, // Hapus untuk menyebabkan error
-      votes: thread.votes, // Sementara set ke thread.votes untuk kompilasi, ini juga akan menyebabkan error pada localVotes
+      votes: localVotes[thread.id] !== undefined ? localVotes[thread.id] : thread.votes,
     }))
     : [];
 
   const voteHandler = (threadId, action) => {
-    const previousVotes = threads.find((thread) => thread.id === threadId).votes;
+    const previousVotes = localVotes[threadId] !== undefined ? localVotes[threadId] : threads.find((thread) => thread.id === threadId).votes;
     let newVotes;
 
     if (action === 'upvote') {
       newVotes = previousVotes + 1;
-      // setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes })); // Hapus untuk menyebabkan error
+      setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes }));
       upVoteMutation.mutate(threadId, {
         onError: () => {
-          // setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes })); // Hapus untuk menyebabkan error
+          setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes }));
         },
       });
     } else if (action === 'downvote') {
       newVotes = previousVotes - 1;
-      // setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes })); // Hapus untuk menyebabkan error
+      setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes }));
       downVoteMutation.mutate(threadId, {
         onError: () => {
-          // setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes })); // Hapus untuk menyebabkan error
+          setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes }));
         },
       });
     } else if (action === 'neutralize') {
       newVotes = previousVotes;
-      // setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes })); // Hapus untuk menyebabkan error
+      setLocalVotes((prev) => ({ ...prev, [threadId]: newVotes }));
       neutralizeVoteMutation.mutate(threadId, {
         onError: () => {
-          // setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes })); // Hapus untuk menyebabkan error
+          setLocalVotes((prev) => ({ ...prev, [threadId]: previousVotes }));
         },
       });
     }
