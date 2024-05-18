@@ -1,80 +1,60 @@
 /**
- * Test scenarios
+ * Test scenarios for AddThreadInput component
  *
- * - AddThreadInput component
- *   - should handle title typing correctly
- *   - should handle category typing correctly
- *   - should handle body typing correctly
- *   - should call addThread function when addThread button is clicked
+ * - should update the title state correctly when typed into
+ * - should update the category state correctly when typed into
+ * - should update the body state correctly when typed into
+ * - should call addThread function with correct arguments when the create button is clicked
  */
 
 import React from 'react';
 import '@testing-library/jest-dom';
-import { cleanup, render, screen } from '@testing-library/react';
-import {
-  afterEach, describe, expect, it, vi,
-} from 'vitest';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import AddThreadInput from './AddThreadInput';
 
 describe('AddThreadInput component', () => {
-  afterEach(() => {
-    cleanup();
-  });
+  let mockAddThread;
 
-  it('should handle title typing correctly', async () => {
-    // arrange
-    render(<AddThreadInput addThread={() => {}} />);
-    const titleInput = await screen.getByPlaceholderText('Title');
-
-    // action
-    await userEvent.type(titleInput, 'inititle');
-
-    // assert
-    expect(titleInput).toHaveValue('inititle');
-  });
-
-  it('should handle category typing correctly', async () => {
-    // arrange
-    render(<AddThreadInput addThread={() => {}} />);
-    const categoryInput = await screen.getByPlaceholderText('Category');
-
-    // action
-    await userEvent.type(categoryInput, 'inikategori');
-
-    // assert
-    expect(categoryInput).toHaveValue('inikategori');
-  });
-
-  it('should handle body typing correctly', async () => {
-    // arrange
-    render(<AddThreadInput addThread={() => {}} />);
-    const bodyInput = await screen.getByPlaceholderText('Content');
-
-    // action
-    await userEvent.type(bodyInput, 'iniisibody');
-
-    // assert
-    expect(bodyInput).toHaveValue('iniisibody');
-  });
-
-  it('should call addThread function when addThread button is clicked', async () => {
-    // arrange
-    const mockAddThread = vi.fn();
+  beforeEach(() => {
+    mockAddThread = vi.fn();
     render(<AddThreadInput addThread={mockAddThread} />);
-    const titleInput = await screen.getByPlaceholderText('Title');
-    await userEvent.type(titleInput, 'inititle');
-    const categoryInput = await screen.getByPlaceholderText('Category');
-    await userEvent.type(categoryInput, 'inikategori');
-    const bodyInput = await screen.getByPlaceholderText('Content');
-    await userEvent.type(bodyInput, 'iniisibody');
-    const addThreadButton = await screen.getByRole('button', { name: 'Create' });
+  });
 
-    // action
-    await userEvent.click(addThreadButton);
+  afterEach(() => {
+    mockAddThread.mockClear();
+  });
 
-    // assert
-    expect(mockAddThread).toBeCalledWith({
+  const typeIntoInput = (placeholderText, value) => {
+    const input = screen.getByPlaceholderText(placeholderText);
+    fireEvent.change(input, { target: { value } });
+    return input;
+  };
+
+  it('should update the title state correctly when typed into', () => {
+    const titleInput = typeIntoInput('Title', 'inititle');
+    expect(titleInput.value).toBe('inititle');
+  });
+
+  it('should update the category state correctly when typed into', () => {
+    const categoryInput = typeIntoInput('Category', 'inikategori');
+    expect(categoryInput.value).toBe('inikategori');
+  });
+
+  it('should update the body state correctly when typed into', () => {
+    const bodyInput = typeIntoInput('Content', 'iniisibody');
+    expect(bodyInput.value).toBe('iniisibody');
+  });
+
+  it('should call addThread function with correct arguments when the create button is clicked', () => {
+    typeIntoInput('Title', 'inititle');
+    typeIntoInput('Category', 'inikategori');
+    typeIntoInput('Content', 'iniisibody');
+    
+    const addThreadButton = screen.getByRole('button', { name: 'Create' });
+    fireEvent.click(addThreadButton);
+
+    expect(mockAddThread).toHaveBeenCalledWith({
       title: 'inititle',
       body: 'iniisibody',
       category: 'inikategori',

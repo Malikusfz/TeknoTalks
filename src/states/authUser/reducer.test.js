@@ -1,68 +1,64 @@
 /**
- * Test scenario for authUserReducer
+ * Test scenarios for the authUserReducer
  *
  * - authUserReducer function
- *   - should return the initial state when given an unknown action
- *   - should return the authUser when given a SET_AUTH_USER action
- *   - should return null when given an UNSET_AUTH_USER action
+ *   - should return the default state when an action type is unknown
+ *   - should update the state with the authUser when receiving SET_AUTH_USER
+ *   - should clear the state to null when receiving UNSET_AUTH_USER
  */
 
-import { describe, expect, it } from 'vitest';
+import { describe, expect, test } from 'vitest';
 import authUserReducer from './reducer';
 import { ActionType } from './action';
 
 describe('authUserReducer function', () => {
-    it('should return the initial state when given an unknown action', () => {
-        // arrange
-        const initialState = null;
-        const action = { type: 'UNKNOWN' };
+    test('returns default state with unknown action type', () => {
+        // Setup default state
+        const defaultState = null;
+        const unknownAction = { type: 'UNKNOWN_ACTION' };
 
-        // action
-        const nextState = authUserReducer(initialState, action);
+        // Execute the reducer with unknown action
+        const resultState = authUserReducer(defaultState, unknownAction);
 
-        // assert
-        expect(nextState).toEqual(initialState);
+        // Assert the state remains unchanged
+        expect(resultState).toBe(defaultState);
     });
 
-    it('should return the authUser when given a SET_AUTH_USER action', () => {
-        // arrange
+    test('updates state with authUser on SET_AUTH_USER action', () => {
+        // Initialize state and action payload
         const initialState = null;
-        const action = {
+        const userData = {
+            id: 'jane_doe',
+            name: 'Jane Doe',
+            email: 'jane@example.com',
+            avatar: 'https://example.com/avatar.jpg',
+        };
+        const setUserAction = {
             type: ActionType.SET_AUTH_USER,
-            payload: {
-                authUser: {
-                    id: 'john_doe',
-                    name: 'John Doe',
-                    email: 'john@example.com',
-                    avatar: 'https://generated-image-url.jpg',
-                },
-            },
+            payload: { authUser: userData },
         };
 
-        // action
-        const nextState = authUserReducer(initialState, action);
+        // Execute the reducer to update state
+        const resultState = authUserReducer(initialState, setUserAction);
 
-        // assert
-        expect(nextState).toEqual(action.payload.authUser);
+        // Verify the new state matches the payload
+        expect(resultState).toEqual(userData);
     });
 
-    it('should return null when given an UNSET_AUTH_USER action', () => {
-        // arrange
+    test('clears state to null on UNSET_AUTH_USER action', () => {
+        // Initialize state with user data
         const initialState = {
-            id: 'john_doe',
-            name: 'John Doe',
-            email: 'john@example.com',
-            avatar: 'https://generated-image-url.jpg',
+            id: 'jane_doe',
+            name: 'Jane Doe',
+            email: 'jane@example.com',
+            avatar: 'https://example.com/avatar.jpg',
         };
+        const unsetUserAction = { type: ActionType.UNSET_AUTH_USER };
 
-        const action = {
-            type: ActionType.UNSET_AUTH_USER,
-        };
+        // Execute the reducer to clear state
+        const resultState = authUserReducer(initialState, unsetUserAction);
 
-        // action
-        const nextState = authUserReducer(initialState, action);
-
-        // assert
-        expect(nextState).toBeNull();
+        // Assert the state is cleared to null
+        expect(resultState).toBeNull();
     });
 });

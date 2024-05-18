@@ -1,65 +1,57 @@
 /**
- * Test scenarios
+ * Test scenarios for LoginInput component
  *
- * - LoginInput component
- *   - should handle email typing correctly
- *   - should handle password typing correctly
- *   - should call login function when login button is clicked
+ * - should update the email state correctly when typed into
+ * - should update the password state correctly when typed into
+ * - should call login function with correct arguments when the sign in button is clicked
  */
 
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
-import {
-  afterEach, describe, expect, it, vi,
-} from 'vitest';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
 import LoginInput from './LoginInput';
 
 describe('LoginInput component', () => {
-  afterEach(() => {
-    cleanup();
-  });
+  let mockLogin;
 
-  it('should handle email typing correctly', async () => {
-    // arrange
-    render(<LoginInput login={() => {}} />);
-    const emailInput = await screen.getByPlaceholderText('Email');
-
-    // action
-    await userEvent.type(emailInput, 'email@gmail.com');
-
-    // assert
-    expect(emailInput).toHaveValue('email@gmail.com');
-  });
-
-  it('should handle password typing correctly', async () => {
-    // arrange
-    render(<LoginInput login={() => {}} />);
-    const passwordInput = await screen.getByPlaceholderText('Password');
-
-    // action
-    await userEvent.type(passwordInput, 'inipasswordtest');
-
-    // assert
-    expect(passwordInput).toHaveValue('inipasswordtest');
-  });
-
-  it('should call login function when login button is clicked', async () => {
-    // Arrange
-    const mockLogin = vi.fn();
+  beforeEach(() => {
+    mockLogin = vi.fn();
     render(<LoginInput login={mockLogin} />);
-    const emailInput = await screen.getByPlaceholderText('Email');
-    await userEvent.type(emailInput, 'email@gmail.com');
-    const passwordInput = await screen.getByPlaceholderText('Password');
-    await userEvent.type(passwordInput, 'inipasswordtest');
-    const loginButton = await screen.getByRole('button', { name: 'Sign In' });
+  });
 
-    // Action
-    await userEvent.click(loginButton);
+  afterEach(() => {
+    mockLogin.mockClear();
+  });
 
-    // Assert
-    expect(mockLogin).toBeCalledWith({
+  const typeIntoInput = async (placeholderText, value) => {
+    const input = screen.getByPlaceholderText(placeholderText);
+    await waitFor(() => {
+      fireEvent.change(input, { target: { value } });
+    });
+    return input;
+  };
+
+  it('should update the email state correctly when typed into', async () => {
+    const emailInput = await typeIntoInput('Email', 'email@gmail.com');
+    expect(emailInput.value).toBe('email@gmail.com');
+  });
+
+  it('should update the password state correctly when typed into', async () => {
+    const passwordInput = await typeIntoInput('Password', 'inipasswordtest');
+    expect(passwordInput.value).toBe('inipasswordtest');
+  });
+
+  it('should call login function with correct arguments when the sign in button is clicked', async () => {
+    await typeIntoInput('Email', 'email@gmail.com');
+    await typeIntoInput('Password', 'inipasswordtest');
+    
+    const signInButton = screen.getByRole('button', { name: 'Sign In' });
+    await waitFor(() => {
+      fireEvent.click(signInButton);
+    });
+
+    expect(mockLogin).toHaveBeenCalledWith({
       email: 'email@gmail.com',
       password: 'inipasswordtest',
     });

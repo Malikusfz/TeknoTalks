@@ -1,18 +1,18 @@
 /**
- * Test scenarios
+ * Test scenarios for NotFound component
  *
- * - NotFound component
- *   - redirects to the homepage when the link is clicked
+ * - should redirect to the homepage when the link is clicked
  */
 
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { describe, expect, it } from 'vitest';
+import '@testing-library/jest-dom';
 import NotFound from './NotFound';
 
 describe('NotFound component', () => {
-  it('redirects to the homepage when the link is clicked', () => {
+  it('should redirect to the homepage when the link is clicked', async () => {
     // arrange
     render(
       <MemoryRouter>
@@ -24,6 +24,8 @@ describe('NotFound component', () => {
     fireEvent.click(screen.getByRole('link', { name: /home page/i }));
 
     // assert
-    expect(window.location.pathname).toBe('/');
+    await waitFor(() => {
+      expect(window.location.pathname).toBe('/');
+    });
   });
 });

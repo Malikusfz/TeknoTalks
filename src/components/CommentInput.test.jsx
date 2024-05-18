@@ -1,50 +1,46 @@
 /**
- * Test scenarios
+ * Test scenarios for CommentInput component
  *
- * - CommentInput component
- *   - should handle comment typing correctly
- *   - should call comment function when comment button is clicked
+ * - should update the comment state correctly when typed into
+ * - should call comment function with correct arguments when the send button is clicked
  */
 
 import React from 'react';
-import { cleanup, render, screen } from '@testing-library/react';
-import {
-  afterEach, describe, expect, it, vi,
-} from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import '@testing-library/jest-dom';
-import userEvent from '@testing-library/user-event';
 import CommentInput from './CommentInput';
 
 describe('CommentInput component', () => {
+  let mockComment;
+
+  beforeEach(() => {
+    mockComment = vi.fn();
+    render(<CommentInput comment={mockComment} />);
+  });
+
   afterEach(() => {
-    cleanup();
+    mockComment.mockClear();
   });
 
-  it('should handle comment typing correctly', async () => {
-    // arrange
-    render(<CommentInput comment={() => {}} />);
-    const commentInput = await screen.getByRole('textbox');
+  const typeIntoTextarea = (value) => {
+    const textarea = screen.getByRole('textbox');
+    fireEvent.change(textarea, { target: { value } });
+    return textarea;
+  };
 
-    // action
-    await userEvent.type(commentInput, 'inicomment');
-
-    // assert
-    expect(commentInput).toHaveValue('inicomment');
+  it('should update the comment state correctly when typed into', () => {
+    const commentTextarea = typeIntoTextarea('inicomment');
+    expect(commentTextarea.value).toBe('inicomment');
   });
 
-  it('should call comment function when comment button is clicked', async () => {
-    // arrange
-    const comment = vi.fn();
-    render(<CommentInput comment={comment} />);
-    const commentInput = await screen.getByRole('textbox');
-    await userEvent.type(commentInput, 'inicomment');
-    const commentButton = await screen.getByRole('button', { name: 'Send' });
+  it('should call comment function with correct arguments when the send button is clicked', () => {
+    typeIntoTextarea('inicomment');
+    
+    const sendButton = screen.getByRole('button', { name: 'Send' });
+    fireEvent.click(sendButton);
 
-    // action
-    await userEvent.click(commentButton);
-
-    // assert
-    expect(comment).toBeCalledWith({
+    expect(mockComment).toHaveBeenCalledWith({
       commentValue: 'inicomment',
     });
   });
