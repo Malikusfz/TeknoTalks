@@ -6,7 +6,6 @@ const ActionType = {
   SET_IS_PRELOAD: 'SET_IS_PRELOAD',
 };
 
-// Action creator untuk mengatur status preload
 function setIsPreloadActionCreator(isPreload) {
   return {
     type: ActionType.SET_IS_PRELOAD,
@@ -14,20 +13,34 @@ function setIsPreloadActionCreator(isPreload) {
   };
 }
 
-// Proses asinkron untuk preload
+// Utility function to handle API response
+const handleApiResponse = async (apiCall, onSuccess, onFailure) => {
+  try {
+    const response = await apiCall();
+    onSuccess(response);
+  } catch (error) {
+    console.error('API call failed:', error);
+    onFailure();
+  }
+};
+
+// Asynchronous preload process using utility function
 function asyncPreloadProcess() {
   return async (dispatch) => {
-    dispatch(showLoading()); // Menampilkan loading bar
+    dispatch(showLoading());
 
-    const authUser = await api
-      .getOwnProfile()
-      .then((data) => data)
-      .catch(() => null);
+    const apiCall = () => api.getOwnProfile();
+    const onSuccess = (authUser) => {
+      dispatch(setAuthUserActionCreator(authUser));
+    };
+    const onFailure = () => {
+      dispatch(setAuthUserActionCreator(null));
+    };
 
-    // Mengatur user autentikasi
-    dispatch(setAuthUserActionCreator(authUser));
-    dispatch(setIsPreloadActionCreator(false)); // Mengatur status preload menjadi false
-    dispatch(hideLoading()); // Menyembunyikan loading bar
+    await handleApiResponse(apiCall, onSuccess, onFailure);
+
+    dispatch(setIsPreloadActionCreator(false));
+    dispatch(hideLoading());
   };
 }
 

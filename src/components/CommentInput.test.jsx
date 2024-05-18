@@ -7,7 +7,9 @@
 
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  afterEach, describe, expect, it, vi,
+} from 'vitest';
 import '@testing-library/jest-dom';
 import CommentInput from './CommentInput';
 
@@ -36,7 +38,7 @@ describe('CommentInput component', () => {
 
   it('should call comment function with correct arguments when the send button is clicked', () => {
     typeIntoTextarea('inicomment');
-    
+
     const sendButton = screen.getByRole('button', { name: 'Send' });
     fireEvent.click(sendButton);
 

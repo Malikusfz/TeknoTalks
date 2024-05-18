@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useMemo } from 'react';
 import ThreadsList from '../components/ThreadsList';
-import asyncPopulateThreadAndUsers from '../states/shared/action';
+import { fetchThreadsAndUsers } from '../states/shared/action';
 import {
   asyncNeutralizeThreadVote,
   asyncToggleDownVoteThread,
@@ -18,11 +18,13 @@ import {
 } from '../states/threads/action';
 
 function Homepage() {
-  const { threads, users, authUser } = useSelector((states) => states);
+  const threads = useSelector((state) => state.threads);
+  const users = useSelector((state) => state.users);
+  const authUser = useSelector((state) => state.authUser);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(asyncPopulateThreadAndUsers());
+    dispatch(fetchThreadsAndUsers());
   }, [dispatch]);
 
   const threadList = useMemo(

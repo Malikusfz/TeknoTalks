@@ -4,24 +4,43 @@ import api from '../../utils/api';
 import { receiveThreadActionCreator } from '../threads/action';
 import { receiveUsersActionCreator } from '../users/action';
 
-function asyncPopulateThreadAndUsers() {
-  return async (dispatch) => {
-    dispatch(showLoading());
+export const ActionTypes = {
+  FETCH_THREADS_AND_USERS_BEGIN: 'FETCH_THREADS_AND_USERS_BEGIN',
+  FETCH_THREADS_AND_USERS_SUCCESS: 'FETCH_THREADS_AND_USERS_SUCCESS',
+  FETCH_THREADS_AND_USERS_ERROR: 'FETCH_THREADS_AND_USERS_ERROR',
+};
 
-    try {
-      const [threads, users] = await Promise.all([
-        api.seeAllThreads(),
-        api.getAllUsers(),
-      ]);
+export const fetchThreadsAndUsersBegin = () => ({
+  type: ActionTypes.FETCH_THREADS_AND_USERS_BEGIN,
+});
 
-      dispatch(receiveThreadActionCreator(threads));
-      dispatch(receiveUsersActionCreator(users));
-    } catch (error) {
-      toast.error(`Error: ${error.message}`);
-    } finally {
-      dispatch(hideLoading());
-    }
-  };
-}
+export const fetchThreadsAndUsersSuccess = (threads, users) => ({
+  type: ActionTypes.FETCH_THREADS_AND_USERS_SUCCESS,
+  payload: { threads, users },
+});
 
-export default asyncPopulateThreadAndUsers;
+export const fetchThreadsAndUsersError = (error) => ({
+  type: ActionTypes.FETCH_THREADS_AND_USERS_ERROR,
+  payload: { error },
+});
+
+export const fetchThreadsAndUsers = () => async (dispatch) => {
+  dispatch(showLoading());
+  dispatch(fetchThreadsAndUsersBegin());
+
+  try {
+    const [threads, users] = await Promise.all([
+      api.seeAllThreads(),
+      api.getAllUsers(),
+    ]);
+
+    dispatch(receiveThreadActionCreator(threads));
+    dispatch(receiveUsersActionCreator(users));
+    dispatch(fetchThreadsAndUsersSuccess(threads, users));
+  } catch (error) {
+    dispatch(fetchThreadsAndUsersError(error.message));
+    toast.error(`Error fetching data: ${error.message}`);
+  } finally {
+    dispatch(hideLoading());
+  }
+};

@@ -1,16 +1,25 @@
 import { ActionType } from './action';
 
-// Membuat fungsi handler secara terpisah
-const setIsPreload = (state, action) => action.payload.isPreload;
+// Initial state
+const initialState = true;
 
-// Menggunakan Map untuk memetakan ActionType ke handler yang sesuai
-const stateMachine = new Map([[ActionType.SET_IS_PRELOAD, setIsPreload]]);
+// Define a function to handle actions
+const actionHandlers = {
+  [ActionType.SET_IS_PRELOAD]: (state, action) => action.payload.isPreload,
+};
 
-// Fungsi reducer yang memanfaatkan Map
-function isPreloadReducer(isPreload = true, action = {}) {
-  // Mendapatkan handler berdasarkan action.type, atau menggunakan fungsi default
-  const handler = stateMachine.get(action.type) || ((state) => state);
-  return handler(isPreload, action);
+const handleAction = (state, action) => {
+  // If an action handler exists for the given action type, use it
+  if (Object.prototype.hasOwnProperty.call(actionHandlers, action.type)) {
+    return actionHandlers[action.type](state, action);
+  }
+  // Otherwise, return the current state
+  return state;
+};
+
+// Reducer function that delegates action handling
+function isPreloadReducer(state = initialState, action = {}) {
+  return handleAction(state, action);
 }
 
 export default isPreloadReducer;

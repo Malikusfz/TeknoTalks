@@ -18,9 +18,10 @@ import {
 } from '../states/threadDetail/action';
 
 function DetailPage() {
-  const { threadDetail = null, authUser } = useSelector((states) => states);
-  const dispatch = useDispatch();
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const threadDetail = useSelector((state) => state.threadDetail);
+  const authUser = useSelector((state) => state.authUser);
 
   useEffect(() => {
     dispatch(asyncReceiveThreadDetail(id));

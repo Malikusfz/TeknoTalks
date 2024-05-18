@@ -10,7 +10,9 @@
 import React from 'react';
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  afterEach, describe, expect, it, vi,
+} from 'vitest';
 import AddThreadInput from './AddThreadInput';
 
 describe('AddThreadInput component', () => {
@@ -50,7 +52,7 @@ describe('AddThreadInput component', () => {
     typeIntoInput('Title', 'inititle');
     typeIntoInput('Category', 'inikategori');
     typeIntoInput('Content', 'iniisibody');
-    
+
     const addThreadButton = screen.getByRole('button', { name: 'Create' });
     fireEvent.click(addThreadButton);
 

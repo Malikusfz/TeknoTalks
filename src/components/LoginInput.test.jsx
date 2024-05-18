@@ -7,8 +7,12 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import {
+  render, screen, fireEvent, waitFor,
+} from '@testing-library/react';
+import {
+  afterEach, describe, expect, it, vi,
+} from 'vitest';
 import '@testing-library/jest-dom';
 import LoginInput from './LoginInput';
 
@@ -45,7 +49,7 @@ describe('LoginInput component', () => {
   it('should call login function with correct arguments when the sign in button is clicked', async () => {
     await typeIntoInput('Email', 'email@gmail.com');
     await typeIntoInput('Password', 'inipasswordtest');
-    
+
     const signInButton = screen.getByRole('button', { name: 'Sign In' });
     await waitFor(() => {
       fireEvent.click(signInButton);

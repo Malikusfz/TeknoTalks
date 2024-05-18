@@ -4,7 +4,7 @@ import {
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
-import { asyncReceiveLeaderboards } from '../states/leaderboards/action';
+import { fetchLeaderboards } from '../states/leaderboards/action';
 import LeaderboardUserItem from '../components/LeaderboardUserItem';
 
 function LeaderboardHeader() {
@@ -24,7 +24,7 @@ function LeaderboardList({ leaderboards, authUser }) {
           key={leaderboard.user.id}
           user={leaderboard.user}
           score={leaderboard.score}
-          authUser={authUser} // tambahkan baris ini
+          authUser={authUser}
           isTopUser={index === 0}
         />
       ))}
@@ -37,17 +37,14 @@ LeaderboardList.propTypes = {
     PropTypes.shape({
       user: PropTypes.shape({
         id: PropTypes.string.isRequired,
-        // Add other properties as needed
       }).isRequired,
       score: PropTypes.number.isRequired,
-      // Add other properties as needed
     }),
   ).isRequired,
   authUser: PropTypes.shape({
     id: PropTypes.string.isRequired,
-    name: PropTypes.string, // If optional
-    email: PropTypes.string.isRequired, // If required
-    // Define other necessary authUser properties here
+    name: PropTypes.string,
+    email: PropTypes.string.isRequired,
   }).isRequired,
 };
 
@@ -57,7 +54,7 @@ function Leaderboards() {
 
   useEffect(() => {
     if (leaderboards.length === 0) {
-      dispatch(asyncReceiveLeaderboards());
+      dispatch(fetchLeaderboards());
     }
   }, [dispatch, leaderboards.length]);
 
