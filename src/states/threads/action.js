@@ -46,7 +46,7 @@ const asyncActionHandler = async (dispatch, asyncFunc, ...params) => {
   } finally {
     dispatch(hideLoading());
   }
-  return null; // Add a return statement at the end of the function
+  return null;
 };
 
 function asyncAddThread({
@@ -68,18 +68,12 @@ function asyncAddThread({
 function asyncToggleUpVoteThread(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
-    dispatch(
-      toggleUpvoteThreadActionCreator({ threadId, userId: authUser.id }),
-    );
-    const success = await asyncActionHandler(
-      dispatch,
-      api.upVoteThread,
-      threadId,
-    );
+    const userId = authUser.id;
+    dispatch(toggleUpvoteThreadActionCreator({ threadId, userId }));
+
+    const success = await asyncActionHandler(dispatch, api.upVoteThread, threadId);
     if (!success) {
-      dispatch(
-        toggleUpvoteThreadActionCreator({ threadId, userId: authUser.id }),
-      );
+      dispatch(toggleUpvoteThreadActionCreator({ threadId, userId }));
     }
   };
 }
@@ -87,18 +81,12 @@ function asyncToggleUpVoteThread(threadId) {
 function asyncToggleDownVoteThread(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
-    dispatch(
-      toggleDownvoteThreadActionCreator({ threadId, userId: authUser.id }),
-    );
-    const success = await asyncActionHandler(
-      dispatch,
-      api.downVoteThread,
-      threadId,
-    );
+    const userId = authUser.id;
+    dispatch(toggleDownvoteThreadActionCreator({ threadId, userId }));
+
+    const success = await asyncActionHandler(dispatch, api.downVoteThread, threadId);
     if (!success) {
-      dispatch(
-        toggleDownvoteThreadActionCreator({ threadId, userId: authUser.id }),
-      );
+      dispatch(toggleDownvoteThreadActionCreator({ threadId, userId }));
     }
   };
 }
@@ -106,18 +94,12 @@ function asyncToggleDownVoteThread(threadId) {
 function asyncNeutralizeThreadVote(threadId) {
   return async (dispatch, getState) => {
     const { authUser } = getState();
-    dispatch(
-      neutralizeThreadVoteActionCreator({ threadId, userId: authUser.id }),
-    );
-    const success = await asyncActionHandler(
-      dispatch,
-      api.neutralizeVoteThread,
-      threadId,
-    );
+    const userId = authUser.id;
+    dispatch(neutralizeThreadVoteActionCreator({ threadId, userId }));
+
+    const success = await asyncActionHandler(dispatch, api.neutralizeVoteThread, threadId);
     if (!success) {
-      dispatch(
-        neutralizeThreadVoteActionCreator({ threadId, userId: authUser.id }),
-      );
+      dispatch(neutralizeThreadVoteActionCreator({ threadId, userId }));
     }
   };
 }
