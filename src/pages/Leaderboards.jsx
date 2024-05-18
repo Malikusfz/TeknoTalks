@@ -49,7 +49,8 @@ LeaderboardList.propTypes = {
 };
 
 function Leaderboards() {
-  const { authUser, leaderboards } = useSelector((state) => state);
+  const authUser = useSelector((state) => state.authUser);
+  const leaderboards = useSelector((state) => state.leaderboards);
   const dispatch = useDispatch();
 
   useEffect(() => {
